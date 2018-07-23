@@ -1,0 +1,9 @@
+---
+# handlers file for {{ cookiecutter.ansible_org_role_slug }}
+{%- set role_name = cookiecutter.ansible_role_slug %}
+
+- name: service restart {{ role_name }}
+  service:
+    name: "{{ '{{' }} {{ role_name }}_service_name {{ '}}' }}"
+    state: restarted
+  when: {{ role_name }}_service_enabld == "yes"

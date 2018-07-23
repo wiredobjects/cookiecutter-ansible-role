@@ -1,0 +1,10 @@
+---
+# tasks file for {{ cookiecutter.ansible_org_role_slug }}
+
+{% if cookiecutter.ansible_role_custom_repo == 'y' -%}
+- include_tasks: repo.yml
+{% endif -%}
+- include_tasks: package.yml
+- include_tasks: config.yml
+- include_tasks: firewall.yml
+- include_tasks: service.yml

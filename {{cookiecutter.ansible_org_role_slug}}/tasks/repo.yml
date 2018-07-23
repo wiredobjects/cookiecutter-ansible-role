@@ -1,0 +1,22 @@
+---
+# subtasks file repo for {{ cookiecutter.ansible_org_role_slug }}
+{%- set role_name = cookiecutter.ansible_role_slug %}
+
+- name: Add custom repo for role {{ role_name }}
+  yum_repository:
+    name: "custom-repo-{{ role_name }}"
+    description: "Custom repo provided by ansible role {{ role_name }}"
+    baseurl: "https://download.example.com/pub/.../$releasever/$basearch/"
+    gpgkey: ""
+    gpgcheck: "{{ '{{' }} {{ role_name }}_repo_gpgcheck {{ '}}' }}"
+    enabled: "{{ '{{' }} {{ role_name }}_repo_enabled {{ '}}' }}"
+  tags:
+    - repo
+  register: state_{{ role_name }}_repo
+
+- name: Refresh repo index on {{ role_name }} change
+  shell: yum -y makecache fast
+  args:
+    # suppress warning to use yum module
+    warn: false
+  when: state_{{ role_name }}_repo.changed

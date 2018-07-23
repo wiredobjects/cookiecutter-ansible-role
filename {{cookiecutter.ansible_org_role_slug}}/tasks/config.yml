@@ -1,0 +1,35 @@
+---
+# subtasks file config for {{ cookiecutter.ansible_org_role_slug }}
+{%- set role_name = cookiecutter.ansible_role_slug %}
+
+- name: Add config dir for {{ role_name }}
+  file:
+    path: "{{ '{{' }} {{ role_name }}_config_dir {{ '}}' }}"
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+  tags:
+    - config
+
+- name: Render config files for {{ role_name }}
+  template:
+    src: "{{ '{{ item }}' }}"
+    dest: "{{ '{{' }} {{ role_name }}_config_file {{ '}}' }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - "{{ role_name }}.conf"
+  register: state_{{ role_name }}_config_file
+  tags:
+    - config
+
+- name: Validate config for service {{ role_name }}
+  shell: /path/to/check_command --with-config-file-param /path/to/configfile
+  when: {{ role_name }}_config_validate == "yes" and state_{{ role_name }}_config_file.changed
+  notify:
+    - service restart {{ role_name }}
+  tags:
+    - config
+    - config_validate

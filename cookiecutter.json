@@ -1,0 +1,23 @@
+{
+    "author_name": "Sven Wilhelm",
+    "email": "refnode@gmail.com",
+    "github_username": "refnode",
+    "ansible_role_organization_name": "",
+    "ansible_role_name": "Ansible Role",
+    "ansible_role_slug": "{{ cookiecutter.ansible_role_name.lower().replace(' ', '_') }}",
+    "ansible_org_role_slug": "{{ cookiecutter.ansible_role_organization_name }}{% if cookiecutter.ansible_role_organization_name != '' -%}.{% endif -%}{{ cookiecutter.ansible_role_slug }}",
+    "ansible_role_short_description": "Ansible role for managing {{ cookiecutter.ansible_role_name }}",
+    "ansible_role_custom_repo": "n",
+    "ansible_min_version": "1.2",
+    "version": "0.1.0",
+    "create_author_file": "y",
+    "open_source_license": [
+        "MIT",
+        "BSD",
+        "GPLv3",
+        "ISCL",
+        "Apache Software License 2.0",
+        "Not open source"
+    ],
+    "_copy_without_render": []
+}

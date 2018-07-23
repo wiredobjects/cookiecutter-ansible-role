@@ -1,0 +1,26 @@
+---
+# defaults file for {{ cookiecutter.ansible_org_role_slug }}
+{%- set role_name = cookiecutter.ansible_role_slug %}
+
+{% if cookiecutter.ansible_role_custom_repo == 'y' -%}
+# defaults for tasks/repository
+{{ role_name }}_repository_gpgcheck: "yes"
+{{ role_name }}_repository_enabled: "no"
+{% endif -%}
+
+# defaults for tasks/package
+{{ role_name }}_package_name: "{{ role_name }}"
+{{ role_name }}_package_state: "present"
+
+# defaults for tasks/config
+{{ role_name }}_config_dir: "{{ '{{ path_sysconfdir }}' }}/{{ role_name }}"
+{{ role_name }}_config_file: "{{ '{{' }} {{ role_name }}_config_dir {{ ' }}' }}/{{ role_name }}.conf"
+{{ role_name }}_config_validate: "no"
+
+# defaults for tasks/firewall
+{{ role_name }}_firewall_enabled: "yes"
+
+# defaults for tasks/service, also used for handlers/
+{{ role_name }}_service_name: "{{ role_name }}"
+{{ role_name }}_service_enabled: "yes"
+{{ role_name }}_service_state: "started"

@@ -1,0 +1,10 @@
+---
+# subtasks file package for {{ cookiecutter.ansible_org_role_slug }}
+{%- set role_name = cookiecutter.ansible_role_slug %}
+
+- name: Add/Remove package {{ role_name }}
+  package:
+    name: "{{ '{{' }} {{ role_name }}_package_name {{ '}}' }}"
+    state: "{{ '{{' }} {{ role_name }}_package_state {{ '}}' }}"
+  tags:
+    - package

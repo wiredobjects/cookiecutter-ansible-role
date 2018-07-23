@@ -1,0 +1,5 @@
+---
+- hosts: localhost
+  remote_user: root
+  roles:
+    - {{ cookiecutter.ansible_org_role_slug }}

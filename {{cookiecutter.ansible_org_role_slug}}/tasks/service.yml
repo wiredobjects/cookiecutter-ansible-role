@@ -1,0 +1,19 @@
+---
+# subtasks file service for {{ cookiecutter.ansible_org_role_slug }}
+{%- set role_name = cookiecutter.ansible_role_slug %}
+
+- name: Enable/Disable service {{ role_name }}
+  service:
+    name: "{{ '{{' }} {{ role_name }}_service_name {{ '}}' }}"
+    enabled: "{{ '{{' }} {{ role_name }}_service_enabled {{ '}}' }}"
+  tags:
+    - service
+    - service_activation
+
+- name: Start/Stop service {{ role_name }}
+  service:
+    name: "{{ '{{' }} {{ role_name }}_service_name {{ '}}' }}"
+    state: "{{ '{{' }} {{ role_name }}_service_state {{ '}}' }}"
+  tags:
+    - service
+    - service_runstate

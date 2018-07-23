@@ -1,0 +1,13 @@
+---
+# subtasks file firewall for {{ cookiecutter.ansible_org_role_slug }}
+{%- set role_name = cookiecutter.ansible_role_slug %}
+
+### WORK IN PROGRESS
+#- name: Add/Remove firewall rules for service {{ role_name }}
+#  firewalld:
+#    service: https
+#    permanent: true
+#    state: enabled
+#  when: {{ role_name }}_firewall_enabled == 'yes'
+#  tags:
+#    - firewall
