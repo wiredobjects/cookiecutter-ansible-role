@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  centos7:
+    image: centos/systemd
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ../:/etc/ansible
+    privileged: true
+    working_dir: /etc/ansible

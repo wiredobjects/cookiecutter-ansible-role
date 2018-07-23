@@ -4,6 +4,7 @@ PLATFORM                   := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCHITECTURE               := $(shell uname -m | sed -e 's/x86_64/amd64/')
 PROJECT_DIR                 = $(PWD)
 VENV_ACTIVATE               = source virtualenv/bin/activate
+ANSIBLE_ROLE_NAME           = {{ cookiecutter.ansible_org_role_slug }}
 ANSIBLE_DIR_ROLES_INTERNAL  = tests/roles/internal
 ANSIBLE_DIR_ROLES_EXTERNAL  = tests/roles/external
 ANSIBLE_GALAXY_ENABLE      ?= no
@@ -11,10 +12,12 @@ ANSIBLE_GALAXY_REQUIREMENTS = tests/roles/requirements.yml
 ANSIBLE_INVENTORY_FILE      = tests/inventory
 ANSIBLE_ENV_ARGS            = ANSIBLE_CONFIG=tests/ansible.cfg
 ANSIBLE_PLAYBOOK_CMD        = $(ANSIBLE_ENV_ARGS) ansible-playbook -i $(ANSIBLE_INVENTORY_FILE) -e "project_dir=$(PWD)"
+DOCKER_COMPOSE              = docker-compose -p $(ANSIBLE_ROLE_NAME) -f tests/docker-compose.yml
 
 
 virtualenv: virtualenv/.built
 galaxy: $(ANSIBLE_DIR_ROLES_INTERNAL)/.built $(ANSIBLE_DIR_ROLES_EXTERNAL)/.built
+test-docker-prepare: tests/docker-centos7.build
 
 help:
 	@echo 'Usage:'
@@ -34,7 +37,7 @@ virtualenv/.built: requirements.txt
 	touch $@
 
 $(ANSIBLE_DIR_ROLES_INTERNAL)/.built: virtualenv
-	ln -sf $(PROJECT_DIR) tests/roles/internal/$(shell basename $(PROJECT_DIR))
+	ln -sf $(PROJECT_DIR) tests/roles/internal/$(ANSIBLE_ROLE_NAME)
 	touch $@
 
 $(ANSIBLE_DIR_ROLES_EXTERNAL)/.built: virtualenv $(ANSIBLE_GALAXY_REQUIREMENTS)
@@ -44,6 +47,17 @@ $(ANSIBLE_DIR_ROLES_EXTERNAL)/.built: virtualenv $(ANSIBLE_GALAXY_REQUIREMENTS)
 test: galaxy
 	$(VENV_ACTIVATE) && $(ANSIBLE_PLAYBOOK_CMD) --syntax-check tests/test.yml
 	$(VENV_ACTIVATE) && ansible-lint tests/test.yml
+
+tests/docker-centos7.build:
+	$(DOCKER_COMPOSE) up -d centos7
+	$(DOCKER_COMPOSE) exec centos7 /bin/sh tests/prepare.sh
+	touch $@
+
+test-docker-run: test-docker-prepare
+	$(DOCKER_COMPOSE) exec centos7 $(ANSIBLE_PLAYBOOK_CMD) tests/test.yml
+
+clean-docker:
+	$(DOCKER_COMPOSE) down -v
 
 clean:
 	rm -rf virtualenv
