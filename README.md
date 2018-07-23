@@ -1,4 +1,4 @@
-# Cookiecutter Template: Ansible ROle
+# Cookiecutter Template: Ansible Role
 
 [![Build Status](https://travis-ci.org/wiredobjects/cookiecutter-ansible-role.svg?branch=develop)](https://travis-ci.org/wiredobjects/cookiecutter-ansible-role)
 
